@@ -1,6 +1,7 @@
 package main
 
 import (
+	"food-delivery/component/appctx"
 	"food-delivery/module/restaurant/transport/ginrestaurant"
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/mysql"
@@ -15,7 +16,9 @@ func main() {
 	if err != nil {
 		log.Fatalln(err)
 	}
-	log.Println(db, err)
+
+	db = db.Debug()
+
 	r := gin.Default()
 	r.GET("/v1", func(c *gin.Context) {
 		c.JSON(200, gin.H{
@@ -23,12 +26,16 @@ func main() {
 		})
 	})
 
-	v1 := r.Group("/v1")
-	restaurants := v1.Group("/restaurants")
+	appCtx := appctx.NewAppContext(db)
 
-	restaurants.POST("/", ginrestaurant.CreateRestaurant(db))
+	v1 := r.Group("/v1")
+
+	restaurants := v1.Group("/restaurants")
+	restaurants.POST("/", ginrestaurant.CreateRestaurant(appCtx))
 	restaurants.DELETE("/:id", ginrestaurant.DeleteRestaurant(db))
-	restaurants.GET("/", ginrestaurant.FindRestaurant(db))
+	restaurants.PUT("/:id", ginrestaurant.FindRestaurant(db))
+	restaurants.GET("/", ginrestaurant.ListRestaurant(appCtx))
+	restaurants.GET("/:id", ginrestaurant.FindRestaurant(db))
 
 	r.Run()
 }

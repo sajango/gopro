@@ -21,9 +21,5 @@ func (biz *findRestaurantBiz) FindRestaurant(ctx context.Context, id int) (*rest
 	if err != nil {
 		return nil, err
 	}
-
-	if err := biz.store.Delete(ctx, id); err != nil {
-		return nil, err
-	}
 	return data, err
 }

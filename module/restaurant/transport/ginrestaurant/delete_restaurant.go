@@ -1,6 +1,7 @@
 package ginrestaurant
 
 import (
+	"food-delivery/common"
 	bizrestaurant "food-delivery/module/restaurant/biz"
 	restaurantstorage "food-delivery/module/restaurant/storage"
 	"github.com/gin-gonic/gin"
@@ -26,8 +27,6 @@ func DeleteRestaurant(db *gorm.DB) gin.HandlerFunc {
 			})
 			return
 		}
-		c.JSON(http.StatusOK, gin.H{
-			"data": 1,
-		})
+		c.JSON(200, common.SimpleSuccessResponse(true))
 	}
 }

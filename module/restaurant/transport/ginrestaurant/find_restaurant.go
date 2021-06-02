@@ -20,7 +20,6 @@ func FindRestaurant(db *gorm.DB) gin.HandlerFunc {
 		}
 		store := restaurantstorage.NewSQLStore(db)
 		biz := bizrestaurant.NewFindRestaurantBiz(store)
-		//var data restaurantmodel.Restaurant
 		if data, err := biz.FindRestaurant(c.Request.Context(), id); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{
 				"error": err.Error(),
