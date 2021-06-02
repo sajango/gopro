@@ -1,0 +1,25 @@
+    newRestaurant := Restaurant{Name: "Lẩu Phan", Addr: "58 Tô Hiệu"}
+	if err := db.Create(&newRestaurant).Error; err != nil {
+		log.Println(err)
+	}
+
+	var myRestaurant Restaurant
+	if err := db.Where("id= ?", 3).First(&myRestaurant).Error; err != nil {
+		log.Println(err)
+	}
+	log.Println(myRestaurant)
+	myRestaurant.Name = "Kiều Hoa Quán"
+	if err := db.Where("id= ?", 3).Updates(&myRestaurant).Error; err != nil {
+		log.Println(err)
+	}
+	log.Println(myRestaurant.Name)
+
+	if err := db.Table(Restaurant{}.tableName()).Where("id= ?", 1).Delete(nil).Error; err != nil {
+		log.Println(err)
+	}
+
+	newName := ""
+	myRestaurantUpdate := RestaurantUpdate{Name: &newName}
+	if err := db.Table(Restaurant{}.tableName()).Where("id= ?", 2).Updates(&myRestaurantUpdate).Error; err != nil {
+		log.Println(err)
+	}
