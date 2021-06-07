@@ -13,6 +13,7 @@ import (
 
 func main() {
 	dsn := os.Getenv("MYSQL_CONN_STRING")
+	port := os.Getenv("PORT")
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		log.Fatalln(err)
@@ -38,5 +39,5 @@ func main() {
 	restaurants.GET("/", ginrestaurant.ListRestaurant(appCtx))
 	restaurants.GET("/:id", ginrestaurant.FindRestaurant(db))
 
-	r.Run()
+	r.Run(port)
 }

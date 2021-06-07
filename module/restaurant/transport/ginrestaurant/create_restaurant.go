@@ -22,6 +22,7 @@ func CreateRestaurant(appCtx appctx.AppContext) gin.HandlerFunc {
 		if err := biz.CreateRestaurant(c.Request.Context(), &data); err != nil {
 			panic(err)
 		}
-		c.JSON(200, common.SimpleSuccessResponse(data.Id))
+		data.Mask(true)
+		c.JSON(200, common.SimpleSuccessResponse(data.FakeId.String()))
 	}
 }
