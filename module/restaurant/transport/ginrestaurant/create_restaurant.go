@@ -7,7 +7,6 @@ import (
 	restaurantmodel "food-delivery/module/restaurant/model"
 	restaurantstorage "food-delivery/module/restaurant/storage"
 	"github.com/gin-gonic/gin"
-	"net/http"
 )
 
 func CreateRestaurant(appCtx appctx.AppContext) gin.HandlerFunc {
@@ -16,18 +15,12 @@ func CreateRestaurant(appCtx appctx.AppContext) gin.HandlerFunc {
 
 		var data restaurantmodel.RestaurantCreate
 		if err := c.ShouldBind(&data); err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{
-				"error": err.Error(),
-			})
-			return
+			panic(err)
 		}
 		store := restaurantstorage.NewSQLStore(db)
 		biz := bizrestaurant.NewCreateRestaurantBiz(store)
 		if err := biz.CreateRestaurant(c.Request.Context(), &data); err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{
-				"error": err.Error(),
-			})
-			return
+			panic(err)
 		}
 		c.JSON(200, common.SimpleSuccessResponse(data.Id))
 	}
